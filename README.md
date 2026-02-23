@@ -4,14 +4,7 @@
 > Turning visual content into intelligent, real-time audio understanding.
 
 ---
-
-<p align="center">
-  <img src="https://your-demo-gif-link.gif" width="800"/>
-</p>
-
-<p align="center">
-  <b>Video → Understanding → Natural Narration → Accessibility</b>
-</p>
+<img width="1587" height="987" alt="image" src="https://github.com/user-attachments/assets/1d95a17c-10d1-4320-9c45-f80602a9ecd7" />
 
 ---
 
