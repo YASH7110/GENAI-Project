@@ -198,30 +198,8 @@ python main.py --video input.mp4
 - Real-time camera narration
 - API-based accessibility service
 
----
 
-## ❤️ Mission
 
-Vision Bridge is more than a project.
-
-It’s about independence.
-
-> “The goal isn’t just to describe pixels — it’s to convey understanding.”
-
----
-
-## 🤝 Contributing
-
-Pull requests are welcome.  
-For major changes, please open an issue first.
-
----
-
-## 📜 License
-
-MIT License
-
----
 
 <p align="center">
 Built with ❤️ for accessibility.
