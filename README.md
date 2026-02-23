@@ -34,7 +34,7 @@ Vision Bridge changes that.
 
 ---
 
-## 🧠 How It Works
+## How It Works
 
 ### 🔄 End-to-End Pipeline
 
