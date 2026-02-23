@@ -1,76 +1,235 @@
-# GENAI-Project
+# 🌉 Vision Bridge
 
+> AI-Powered Video Accessibility for the Visually Impaired  
+> Turning visual content into intelligent, real-time audio understanding.
 
+---
 
+<p align="center">
+  <img src="https://your-demo-gif-link.gif" width="800"/>
+</p>
 
+<p align="center">
+  <b>Video → Understanding → Natural Narration → Accessibility</b>
+</p>
 
-<img width="1587" height="987" alt="image" src="https://github.com/user-attachments/assets/40db6db3-04bd-4d03-a41c-36ff769efee6" />
+---
 
+## 🚀 What is Vision Bridge?
 
-🎥 Vision Bridge: AI-Powered Video Accessibility for the Visually Impaired
-The Problem
-Over 2.2 billion people worldwide live with vision impairment, yet most video content remains inaccessible to them. Traditional solutions rely on pre-existing audio descriptions (rarely available) or screen readers that simply announce "image" or "video"—providing zero meaningful context about what's actually happening on screen.
-The Solution
-Vision Bridge is an end-to-end AI pipeline that transforms video content into natural, descriptive audio narrations. It watches videos the way humans do—understanding context, tracking actions over time, and describing events in flowing language rather than robotic frame-by-frame labels.
-How It Works
-The Pipeline
-plain
-Copy
-Video Input → Frame Extraction → Vision AI → Caption Generation 
-                                               ↓
-Audio Output ← Text-to-Speech ← Context Aggregation
-1. Video Processing
-Extracts 1 frame per second using OpenCV
-Detects scene changes to identify important moments
-Preprocesses images for AI analysis
-2. Vision Understanding
-Uses pretrained vision-language models (CLIP, BLIP-2, or ViT-GPT2)
-Generates descriptive captions for each frame
-Leverages transfer learning—no training from scratch required
-4. Smart Context Aggregation (The Secret Sauce)
-Raw AI output is repetitive and jarring:
-❌ "A man" → "A man" → "A man" → "A man walking" → "A man walking"
-Vision Bridge uses semantic similarity algorithms to merge consecutive related captions into coherent narratives:
-✅ "A man is walking down the street toward a crosswalk."
-5. Natural Voice Output
-Converts aggregated descriptions to speech using gTTS, Coqui TTS, or premium ElevenLabs API
-Delivers smooth, human-like audio descriptions
-Key Innovations
-Table
-Copy
-Feature	Why It Matters
-Temporal Smoothing	Eliminates redundant descriptions that frustrate users
-Action Continuity	Tracks movements across frames ("walking," "approaching")
-Configurable Priority	Alerts users to critical objects first (people > vehicles > obstacles)
-Spatial Awareness	Can describe direction: "Car approaching from the left"
-Event Detection	Only narrates meaningful moments, not static scenes
-Real-World Impact
-Before Vision Bridge:
-A blind user watching a street scene hears: "A man. A man. A man. A car. A man. A man."
-After Vision Bridge:
-They hear: "A man is walking down the street. A red car approaches from the left and stops at the intersection. The man continues walking past a coffee shop."
-Technology Stack
-Video Processing: OpenCV, FFmpeg, Pillow
-AI Models: PyTorch, Hugging Face Transformers, CLIP, BLIP-2
-NLP: spaCy, NLTK, Sentence Transformers (for semantic similarity)
-Text-to-Speech: gTTS (free), Coqui TTS (open source), ElevenLabs (premium)
-Infrastructure: Python 3.8+, FastAPI, Docker
-Use Cases
-Entertainment: Making YouTube videos, movies, and TV shows accessible
-Education: Describing video lectures and demonstrations
-Navigation: Real-time scene description for mobility assistance
-Safety: Alerting to obstacles, vehicles, and hazards in the environment
-Social Media: Accessing Instagram, TikTok, and video-heavy platforms
-Development Roadmap
-Phase 1: Core Pipeline 
-Frame extraction, caption generation, basic TTS
-Phase 2: Intelligence 
-Temporal smoothing, scene detection, action tracking
-Phase 3: Advanced Perception 📋
-Object detection (YOLO), spatial direction, OCR for text reading
-Real-time streaming support
-Multi-language narration
-Why This Matters
-Vision Bridge isn't just a tech demo—it's a bridge to independence. For millions of blind and visually impaired individuals, it transforms video from an inaccessible medium into a rich source of information, entertainment, and autonomy.
-"The goal isn't just to describe pixels—it's to convey understanding."
+**Vision Bridge** is an AI system that transforms video content into natural, context-aware audio narration for visually impaired users.
+
+Instead of robotic frame-by-frame labels, Vision Bridge:
+
+- Understands scenes
+- Tracks actions over time
+- Merges context intelligently
+- Speaks smooth human-like descriptions
+
+---
+
+## 🌍 Why It Matters
+
+Over **2.2 billion people** worldwide live with vision impairment.
+
+Yet most videos:
+- ❌ Lack audio descriptions
+- ❌ Are inaccessible on social media
+- ❌ Provide no contextual understanding
+
+Vision Bridge changes that.
+
+---
+
+## 🧠 How It Works
+
+### 🔄 End-to-End Pipeline
+
+```
+Video Input
+   ↓
+Frame Extraction (OpenCV)
+   ↓
+Vision AI (CLIP / BLIP-2)
+   ↓
+Caption Generation
+   ↓
+Temporal Context Aggregation
+   ↓
+Text-to-Speech Engine
+   ↓
+Natural Audio Output
+```
+
+---
+
+## 🏗 Architecture Overview
+
+### 1️⃣ Frame Processing
+- Extracts 1 FPS using OpenCV
+- Scene change detection
+- Image preprocessing pipeline
+
+### 2️⃣ Vision-Language Understanding
+- BLIP-2 / CLIP / ViT-GPT2
+- Generates semantic captions
+- Transfer learning-based
+
+### 3️⃣ Context Intelligence (Core Innovation)
+Raw AI Output:
+```
+"A man"
+"A man"
+"A man walking"
+```
+
+After Vision Bridge smoothing:
+```
+"A man is walking down the street toward a crosswalk."
+```
+
+Techniques:
+- Semantic similarity (Sentence Transformers)
+- Temporal merging
+- Action continuity tracking
+- Event filtering
+
+### 4️⃣ Voice Synthesis
+- gTTS (free)
+- Coqui TTS (open-source)
+- ElevenLabs (premium, realistic)
+
+---
+
+## ✨ Key Features
+
+| Feature | Impact |
+|----------|--------|
+| 🧠 Temporal Smoothing | Removes repetitive narration |
+| 🚶 Action Tracking | Describes motion across frames |
+| 📍 Spatial Awareness | "Car approaching from the left" |
+| 🚨 Priority Alert System | Highlights people, vehicles, obstacles |
+| 🔎 Event Detection | Narrates meaningful changes only |
+
+---
+
+## 🎯 Example Output
+
+### Before Vision Bridge:
+> "A man. A man. A car. A man."
+
+### After Vision Bridge:
+> "A man is walking down the street. A red car approaches from the left and stops at the intersection."
+
+---
+
+## 🛠 Tech Stack
+
+**Core AI**
+- PyTorch
+- Hugging Face Transformers
+- CLIP / BLIP-2
+
+**Video Processing**
+- OpenCV
+- FFmpeg
+- Pillow
+
+**NLP**
+- spaCy
+- NLTK
+- Sentence Transformers
+
+**Speech**
+- gTTS
+- Coqui TTS
+- ElevenLabs API
+
+**Backend**
+- Python 3.8+
+- FastAPI
+- Docker
+
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/yourusername/vision-bridge.git
+cd vision-bridge
+pip install -r requirements.txt
+```
+
+Run:
+
+```bash
+python main.py --video input.mp4
+```
+
+---
+
+## 📌 Use Cases
+
+- 🎬 Entertainment Accessibility (YouTube, Movies)
+- 🎓 Educational Videos
+- 🚶 Real-Time Mobility Assistance
+- 🚨 Obstacle & Hazard Alerts
+- 📱 Social Media Accessibility
+
+---
+
+## 🗺 Roadmap
+
+### Phase 1 — Core Pipeline ✅
+- Frame extraction
+- Caption generation
+- Basic TTS
+
+### Phase 2 — Context Intelligence 🚧
+- Temporal smoothing
+- Scene detection
+- Action continuity
+
+### Phase 3 — Advanced Perception 🔜
+- YOLO object detection
+- OCR for text reading
+- Real-time streaming support
+- Multilingual narration
+
+---
+
+## 🧪 Future Vision
+
+- Wearable assistive device integration
+- Edge deployment (Raspberry Pi)
+- Real-time camera narration
+- API-based accessibility service
+
+---
+
+## ❤️ Mission
+
+Vision Bridge is more than a project.
+
+It’s about independence.
+
+> “The goal isn’t just to describe pixels — it’s to convey understanding.”
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome.  
+For major changes, please open an issue first.
+
+---
+
+## 📜 License
+
+MIT License
+
+---
+
+<p align="center">
 Built with ❤️ for accessibility.
+</p>
