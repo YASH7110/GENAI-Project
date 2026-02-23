@@ -8,7 +8,7 @@
 
 ---
 
-## 🚀 What is Vision Bridge?
+##1. What is Vision Bridge?
 
 **Vision Bridge** is an AI system that transforms video content into natural, context-aware audio narration for visually impaired users.
 
@@ -21,14 +21,14 @@ Instead of robotic frame-by-frame labels, Vision Bridge:
 
 ---
 
-## 🌍 Why It Matters
+## 2. Why It Matters
 
 Over **2.2 billion people** worldwide live with vision impairment.
 
 Yet most videos:
-- ❌ Lack audio descriptions
-- ❌ Are inaccessible on social media
-- ❌ Provide no contextual understanding
+-  Lack audio descriptions
+-  Are inaccessible on social media
+-  Provide no contextual understanding
 
 Vision Bridge changes that.
 
@@ -56,7 +56,7 @@ Natural Audio Output
 
 ---
 
-## 🏗 Architecture Overview
+##3. Architecture Overview
 
 ### 1️⃣ Frame Processing
 - Extracts 1 FPS using OpenCV
@@ -98,11 +98,11 @@ Techniques:
 
 | Feature | Impact |
 |----------|--------|
-| 🧠 Temporal Smoothing | Removes repetitive narration |
-| 🚶 Action Tracking | Describes motion across frames |
-| 📍 Spatial Awareness | "Car approaching from the left" |
-| 🚨 Priority Alert System | Highlights people, vehicles, obstacles |
-| 🔎 Event Detection | Narrates meaningful changes only |
+| -> Temporal Smoothing | Removes repetitive narration |
+| -> Action Tracking | Describes motion across frames |
+| -> Spatial Awareness | "Car approaching from the left" |
+| -> Priority Alert System | Highlights people, vehicles, obstacles |
+| -> Event Detection | Narrates meaningful changes only |
 
 ---
 
@@ -116,7 +116,7 @@ Techniques:
 
 ---
 
-## 🛠 Tech Stack
+## 4. Tech Stack
 
 **Core AI**
 - PyTorch
@@ -145,7 +145,7 @@ Techniques:
 
 ---
 
-## 📦 Installation
+## 5.Installation
 
 ```bash
 git clone https://github.com/yourusername/vision-bridge.git
@@ -161,7 +161,7 @@ python main.py --video input.mp4
 
 ---
 
-## 📌 Use Cases
+## 6. Use Cases
 
 - 🎬 Entertainment Accessibility (YouTube, Movies)
 - 🎓 Educational Videos
@@ -171,19 +171,19 @@ python main.py --video input.mp4
 
 ---
 
-## 🗺 Roadmap
+## 7. Roadmap
 
-### Phase 1 — Core Pipeline ✅
+### Phase 1 — Core Pipeline 
 - Frame extraction
 - Caption generation
 - Basic TTS
 
-### Phase 2 — Context Intelligence 🚧
+### Phase 2 — Context Intelligence 
 - Temporal smoothing
 - Scene detection
 - Action continuity
 
-### Phase 3 — Advanced Perception 🔜
+### Phase 3 — Advanced Perception 
 - YOLO object detection
 - OCR for text reading
 - Real-time streaming support
@@ -191,7 +191,7 @@ python main.py --video input.mp4
 
 ---
 
-## 🧪 Future Vision
+## 8.Future Vision
 
 - Wearable assistive device integration
 - Edge deployment (Raspberry Pi)
@@ -202,5 +202,5 @@ python main.py --video input.mp4
 
 
 <p align="center">
-Built with ❤️ for accessibility.
+Built with for accessibility.
 </p>
