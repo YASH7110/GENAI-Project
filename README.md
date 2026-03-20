@@ -12,7 +12,8 @@ Built as part of a broader GenAI accessibility initiative aimed at bridging comm
 
 ---
 
-![Architecture Overview](https://raw.githubusercontent.com/YASH7110/GENAI-Project/main/assets/architecture.png)
+<img width="1282" height="980" alt="image" src="https://github.com/user-attachments/assets/1a5370b9-b179-4c8a-afc3-06f817055eb3" />
+
 
 > Pipeline: Camera → MediaPipe landmark detection → LSTM classifier → Claude refinement → Text/Speech output
 
