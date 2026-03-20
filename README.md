@@ -1,206 +1,200 @@
-# 🌉 Vision Bridge
+# Sign Language Interpreter AI
 
-> AI-Powered Video Accessibility for the Visually Impaired  
-> Turning visual content into intelligent, real-time audio understanding.
+![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat-square&logo=python)
+![MediaPipe](https://img.shields.io/badge/MediaPipe-Hands-green?style=flat-square)
+![Claude API](https://img.shields.io/badge/Claude-API-blueviolet?style=flat-square)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-teal?style=flat-square&logo=fastapi)
+![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)
 
----
-<img width="1587" height="987" alt="image" src="https://github.com/user-attachments/assets/1d95a17c-10d1-4320-9c45-f80602a9ecd7" />
+Real-time sign language translation using computer vision and large language models. The system captures hand gestures through a webcam, detects 21 landmark points per hand, classifies the gesture, and then uses Claude to produce grammatically natural output — not just a list of words.
 
----
-
-##1. What is Vision Bridge?
-
-**Vision Bridge** is an AI system that transforms video content into natural, context-aware audio narration for visually impaired users.
-
-Instead of robotic frame-by-frame labels, Vision Bridge:
-
-- Understands scenes
-- Tracks actions over time
-- Merges context intelligently
-- Speaks smooth human-like descriptions
+Built as part of a broader GenAI accessibility initiative aimed at bridging communication gaps for the deaf and hard-of-hearing community.
 
 ---
 
-## 2. Why It Matters
+![Architecture Overview](https://raw.githubusercontent.com/YASH7110/GENAI-Project/main/assets/architecture.png)
 
-Over **2.2 billion people** worldwide live with vision impairment.
-
-Yet most videos:
--  Lack audio descriptions
--  Are inaccessible on social media
--  Provide no contextual understanding
-
-Vision Bridge changes that.
+> Pipeline: Camera → MediaPipe landmark detection → LSTM classifier → Claude refinement → Text/Speech output
 
 ---
 
-## How It Works
+## How it works
 
-### 🔄 End-to-End Pipeline
+The interpreter runs in three stages.
 
-```
-Video Input
-   ↓
-Frame Extraction (OpenCV)
-   ↓
-Vision AI (CLIP / BLIP-2)
-   ↓
-Caption Generation
-   ↓
-Temporal Context Aggregation
-   ↓
-Text-to-Speech Engine
-   ↓
-Natural Audio Output
-```
+First, MediaPipe Hands extracts 21 key points from each hand frame — fingertips, knuckles, wrist — giving you a `21 × 3` array of normalized coordinates per frame. This runs at ~30fps on a standard laptop without any GPU.
+
+Second, a trained LSTM model receives a sliding window of ~30 frames and predicts the gesture being performed. Static signs like "yes" or "no" need only a single frame; dynamic signs involving motion require the full sequence.
+
+Third, the sequence of predicted words gets sent to Claude, which converts choppy classifier output like `["I", "want", "drink", "water"]` into a fluent, natural sentence. This is what makes the output actually usable in conversation.
 
 ---
 
-##3. Architecture Overview
+## Tech stack
 
-### 1️⃣ Frame Processing
-- Extracts 1 FPS using OpenCV
-- Scene change detection
-- Image preprocessing pipeline
-
-### 2️⃣ Vision-Language Understanding
-- BLIP-2 / CLIP / ViT-GPT2
-- Generates semantic captions
-- Transfer learning-based
-
-### 3️⃣ Context Intelligence (Core Innovation)
-Raw AI Output:
-```
-"A man"
-"A man"
-"A man walking"
-```
-
-After Vision Bridge smoothing:
-```
-"A man is walking down the street toward a crosswalk."
-```
-
-Techniques:
-- Semantic similarity (Sentence Transformers)
-- Temporal merging
-- Action continuity tracking
-- Event filtering
-
-### 4️⃣ Voice Synthesis
-- gTTS (free)
-- Coqui TTS (open-source)
-- ElevenLabs (premium, realistic)
+| Layer | Tools |
+|---|---|
+| Hand detection | MediaPipe Hands |
+| Frame capture | OpenCV |
+| Gesture classification | LSTM / CNN (PyTorch) |
+| Language refinement | Claude API (Anthropic) |
+| Backend | FastAPI + WebSockets |
+| Speech output | gTTS / ElevenLabs |
+| Dataset | WLASL, ISL-CSLRT |
 
 ---
 
-## ✨ Key Features
+## Getting started
 
-| Feature | Impact |
-|----------|--------|
-| -> Temporal Smoothing | Removes repetitive narration |
-| -> Action Tracking | Describes motion across frames |
-| -> Spatial Awareness | "Car approaching from the left" |
-| -> Priority Alert System | Highlights people, vehicles, obstacles |
-| -> Event Detection | Narrates meaningful changes only |
+**Requirements**
 
----
-
-## 🎯 Example Output
-
-### Before Vision Bridge:
-> "A man. A man. A car. A man."
-
-### After Vision Bridge:
-> "A man is walking down the street. A red car approaches from the left and stops at the intersection."
-
----
-
-## 4. Tech Stack
-
-**Core AI**
-- PyTorch
-- Hugging Face Transformers
-- CLIP / BLIP-2
-
-**Video Processing**
-- OpenCV
-- FFmpeg
-- Pillow
-
-**NLP**
-- spaCy
-- NLTK
-- Sentence Transformers
-
-**Speech**
-- gTTS
-- Coqui TTS
-- ElevenLabs API
-
-**Backend**
 - Python 3.8+
-- FastAPI
-- Docker
+- A webcam
+- Anthropic API key (get one at console.anthropic.com)
 
----
-
-## 5.Installation
+**Installation**
 
 ```bash
-git clone https://github.com/yourusername/vision-bridge.git
-cd vision-bridge
+git clone https://github.com/YASH7110/sign-language-interpreter.git
+cd sign-language-interpreter
 pip install -r requirements.txt
 ```
 
-Run:
+**Set your API key**
 
 ```bash
-python main.py --video input.mp4
+export ANTHROPIC_API_KEY=your_key_here
+```
+
+**Run the interpreter**
+
+```bash
+python main.py
+```
+
+For the web interface:
+
+```bash
+uvicorn app:app --reload
+```
+
+Then open `http://localhost:8000` in your browser.
+
+---
+
+## Collecting your own gesture data
+
+The project ships with a data collection script. Point your webcam at your hand and run:
+
+```bash
+python collect_data.py --gesture "hello" --samples 200
+```
+
+This saves 200 samples of the landmark array for that gesture. Repeat for each sign you want to support. Ten gestures with 200 samples each is enough to get started.
+
+```
+data/
+  hello/
+    sample_001.npy
+    sample_002.npy
+    ...
+  thankyou/
+    ...
 ```
 
 ---
 
-## 6. Use Cases
+## Training
 
-- 🎬 Entertainment Accessibility (YouTube, Movies)
-- 🎓 Educational Videos
-- 🚶 Real-Time Mobility Assistance
-- 🚨 Obstacle & Hazard Alerts
-- 📱 Social Media Accessibility
+Once you have data collected:
 
----
+```bash
+python train.py --epochs 50 --model lstm
+```
 
-## 7. Roadmap
-
-### Phase 1 — Core Pipeline 
-- Frame extraction
-- Caption generation
-- Basic TTS
-
-### Phase 2 — Context Intelligence 
-- Temporal smoothing
-- Scene detection
-- Action continuity
-
-### Phase 3 — Advanced Perception 
-- YOLO object detection
-- OCR for text reading
-- Real-time streaming support
-- Multilingual narration
+The training script handles the sequence padding and train/val split automatically. Expect ~90% accuracy on a 10-gesture dataset after 50 epochs.
 
 ---
 
-## 8.Future Vision
+## Project structure
 
-- Wearable assistive device integration
-- Edge deployment (Raspberry Pi)
-- Real-time camera narration
-- API-based accessibility service
+```
+sign-language-interpreter/
+  main.py               # Entry point, runs the interpreter loop
+  collect_data.py       # Webcam-based data collection
+  train.py              # Model training script
+  app.py                # FastAPI backend
+  models/
+    lstm_classifier.py  # LSTM model definition
+    classifier.pt       # Saved weights (after training)
+  utils/
+    mediapipe_utils.py  # Landmark extraction helpers
+    llm_refiner.py      # Claude API integration
+  data/                 # Collected gesture samples
+  templates/            # Web UI
+  requirements.txt
+```
 
+---
 
+## Example output
 
+Raw classifier output:
 
-<p align="center">
-Built with for accessibility.
-</p>
+```
+["I", "name", "Yash", "from", "India"]
+```
+
+After Claude refinement:
+
+```
+"My name is Yash and I'm from India."
+```
+
+---
+
+## Supported gestures (default set)
+
+The pretrained weights cover ten basic signs: Hello, Thank you, Yes, No, Please, Help, Water, Food, I, You.
+
+You can extend this to any vocabulary by collecting data and retraining. The WLASL dataset covers over 2000 ASL words if you want to go further.
+
+---
+
+## Roadmap
+
+- [x] MediaPipe landmark extraction
+- [x] LSTM classifier on static gestures
+- [x] Claude API refinement layer
+- [x] FastAPI + WebSocket backend
+- [ ] Dynamic gesture support (motion-based signs)
+- [ ] ISL (Indian Sign Language) dedicated model
+- [ ] Mobile app (Flutter)
+- [ ] Bidirectional communication (text-to-sign avatar)
+- [ ] Offline mode with on-device model
+
+---
+
+## Contributing
+
+Pull requests are welcome. If you want to add support for a new sign language (ISL, BSL, etc.) or improve the classifier architecture, open an issue first so we can discuss the approach.
+
+For dataset contributions, follow the collection format in `collect_data.py` and submit a PR with your samples included.
+
+---
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## Author
+
+Yash Pratap Singh  
+yashthakur1700@gmail.com  
+[github.com/YASH7110](https://github.com/YASH7110)
+
+---
+
+*Part of the GenAI Accessibility Project — building AI tools for deaf, hard-of-hearing, and visually impaired communities.*
