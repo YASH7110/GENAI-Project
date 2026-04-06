@@ -7,7 +7,7 @@
 ![Platform](https://img.shields.io/badge/Platform-Mac_M1_|_Colab-lightgrey?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
 
-Real-time American Sign Language recognition using a hybrid deep learning architecture that combines ResNet50's local feature extraction with Vision Transformer's global context modeling. Trained on 87,000 images across 29 ASL classes, achieving **99.77% validation accuracy**.
+Real-time American Sign Language recognition using a hybrid deep learning architecture that combines ResNet50's local feature extraction with Vision Transformer's global context modeling. Trained on 87,000 images across 29 ASL classes
 
 ![ASL Alphabet](https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/ASL_alphabet_gallaudet.svg/1200px-ASL_alphabet_gallaudet.svg.png)
 *ASL Alphabet — 26 letters + del, nothing, space*
@@ -45,26 +45,15 @@ ResNet50   ViT-Base/16
    Predicted Sign
 ```
 
-![Architecture](https://miro.medium.com/v2/resize:fit:1400/1*D7hh0zNTnW2Tm39v4OAUVA.png)
+<img width="1292" height="1482" alt="image" src="https://github.com/user-attachments/assets/1461d563-d54e-4ab7-95e1-e9873cc58e41" />
+
 *Vision Transformer patch-based processing*
 
 Both backbones are pretrained on ImageNet. Early ResNet layers are frozen during training — only the last 2 blocks fine-tune along with the full ViT.
 
 ---
 
-## Results
 
-| Metric | Value |
-|--------|-------|
-| Validation Accuracy | **99.77%** |
-| Train Accuracy (Epoch 1) | 97.51% |
-| Dataset | ASL Alphabet (Kaggle) |
-| Classes | 29 |
-| Training Time (T4 GPU) | ~20 mins |
-
-The model hit 99.77% val accuracy after just one epoch — which shows the power of combining pretrained ResNet50 and ViT on a well-structured dataset.
-
----
 
 ## Dataset
 
