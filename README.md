@@ -9,7 +9,7 @@
 
 Real-time American Sign Language recognition using a hybrid deep learning architecture that combines ResNet50's local feature extraction with Vision Transformer's global context modeling. Trained on 87,000 images across 29 ASL classes
 
-![ASL Alphabet](https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/ASL_alphabet_gallaudet.svg/1200px-ASL_alphabet_gallaudet.svg.png)
+
 *ASL Alphabet — 26 letters + del, nothing, space*
 
 ---
