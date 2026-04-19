@@ -12,7 +12,8 @@ Real-time sign language detector that reads hand gestures from webcam and conver
 - Speaks the detected word out loud
 
 ---
-<img width="1292" height="988" alt="image" src="https://github.com/user-attachments/assets/d7f585e7-bbae-4a4d-ae80-7f5f9872d4ac" />
+<img width="1194" height="1647" alt="image" src="https://github.com/user-attachments/assets/22ffabf0-268a-455a-9f8e-c6c933109136" />
+
 
 
 ## Architecture
