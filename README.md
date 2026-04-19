@@ -55,7 +55,8 @@ Prediction + Confidence Score
 ```
 
 ---
-<img width="1292" height="1216" alt="image" src="https://github.com/user-attachments/assets/329742e9-a239-430a-9041-db45170f6083" />
+<img width="1192" height="1878" alt="image" src="https://github.com/user-attachments/assets/78a974ac-a8d9-4a7d-b318-4618c15c305b" />
+
 
 
 
