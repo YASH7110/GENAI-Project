@@ -12,6 +12,8 @@ Real-time sign language detector that reads hand gestures from webcam and conver
 - Speaks the detected word out loud
 
 ---
+<img width="1292" height="988" alt="image" src="https://github.com/user-attachments/assets/d7f585e7-bbae-4a4d-ae80-7f5f9872d4ac" />
+
 
 ## Architecture
 
@@ -52,6 +54,9 @@ Prediction + Confidence Score
 ```
 
 ---
+<img width="1292" height="1216" alt="image" src="https://github.com/user-attachments/assets/329742e9-a239-430a-9041-db45170f6083" />
+
+
 
 ## Why no CNN
 
@@ -120,6 +125,8 @@ Press `Q` to quit.
 - **Buffer indicator** — orange bar shows progress toward the 30-frame window.
 
 ---
+<img width="962" height="538" alt="Screenshot 2026-04-19 at 2 59 50 PM" src="https://github.com/user-attachments/assets/fda895e7-63da-44d5-8836-9747f42d6f36" />
+<img width="960" height="543" alt="Screenshot 2026-04-19 at 2 59 38 PM" src="https://github.com/user-attachments/assets/b8cd8cbb-164d-440e-8b0a-02d91375fbeb" />
 
 ## Built with
 
