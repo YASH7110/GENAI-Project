@@ -1,228 +1,136 @@
-# ASL Sign Language Recognition
-### Hybrid ResNet50 + Vision Transformer (ViT)
+# Sign Language Recognition using Bidirectional LSTM
 
-![Python](https://img.shields.io/badge/Python-3.11-blue?style=flat-square&logo=python)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.11-EE4C2C?style=flat-square&logo=pytorch)
-![Accuracy](https://img.shields.io/badge/Val_Accuracy-99.77%25-brightgreen?style=flat-square)
-![Platform](https://img.shields.io/badge/Platform-Mac_M1_|_Colab-lightgrey?style=flat-square)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)
-
-Real-time American Sign Language recognition using a hybrid deep learning architecture that combines ResNet50's local feature extraction with Vision Transformer's global context modeling. Trained on 87,000 images across 29 ASL classes
-
-
-*ASL Alphabet — 26 letters + del, nothing, space*
+Real-time sign language detector that reads hand gestures from webcam and converts them to text and speech. Built without CNN — uses only hand geometry, which keeps the model small and fast.
 
 ---
 
-## What this does
+## What it does
 
-Point a webcam at your hand, and the model tells you which ASL sign you're making — in real time. It detects the hand region from the frame, crops it, runs it through the hybrid model, and shows the top 3 predictions with confidence scores.
-
-Works on static images too via the Streamlit web interface.
-
----
-
-## Model Architecture
-
-The core idea is simple: ResNet50 is really good at picking up local texture and shape details (like finger positions), while ViT is good at understanding the overall spatial arrangement. Combining both gives better results than either alone.
-
-```
-Input Image (224×224)
-        │
-   ┌────┴────┐
-   │         │
-ResNet50   ViT-Base/16
-(pretrained) (pretrained)
-2048-d      768-d
-   │         │
-   └────┬────┘
-    concat (2816-d)
-        │
-   Linear(512) → ReLU → Dropout(0.3)
-        │
-   Linear(29) → Softmax
-        │
-   Predicted Sign
-```
-
-<img width="1292" height="1482" alt="image" src="https://github.com/user-attachments/assets/1461d563-d54e-4ab7-95e1-e9873cc58e41" />
-
-*Vision Transformer patch-based processing*
-
-Both backbones are pretrained on ImageNet. Early ResNet layers are frozen during training — only the last 2 blocks fine-tune along with the full ViT.
+- Detects 10 ASL signs live from webcam
+- Shows confidence score and which frames the model focused on (attention heatmap)
+- Displays a skeleton mirror — the AI's geometric view of your hand
+- Speaks the detected word out loud
 
 ---
 
+## Architecture
 
-
-## Dataset
-
-**ASL Alphabet** by grassknoted on Kaggle  
-- 87,000 training images  
-- 29 classes: A–Z + `del`, `nothing`, `space`  
-- 200×200 px, RGB
-
-```bash
-kaggle datasets download -d grassknoted/asl-alphabet -p ./data --unzip
 ```
-
-Get your `kaggle.json` from [kaggle.com → Account → API → Create New Token](https://www.kaggle.com/settings/account)
+Webcam (30 frames)
+     │
+     ▼
+MediaPipe Hand Tracking
+     │  extracts 21 landmarks per frame
+     │  each landmark = x, y, z
+     │  21 × 3 = 63 features per frame
+     ▼
+StandardScaler (normalize)
+     │
+     ▼
+┌─────────────────────────────────┐
+│  Bidirectional LSTM  (128 units)│  ← reads gesture forward + backward
+│  BatchNorm + Dropout 0.3        │
+├─────────────────────────────────┤
+│  Bidirectional LSTM  (64 units) │  ← refines temporal pattern
+│  BatchNorm + Dropout 0.3        │  ← attention tapped here
+├─────────────────────────────────┤
+│  LSTM  (64 units)               │  ← collapses 30 frames → 1 vector
+│  BatchNorm + Dropout 0.3        │
+├─────────────────────────────────┤
+│  Dense 128 → Dense 64           │
+│  Dropout 0.4 / 0.3              │
+├─────────────────────────────────┤
+│  Dense 10  →  Softmax           │  ← one of 10 signs
+└─────────────────────────────────┘
+     │
+     ▼
+Prediction + Confidence Score
+     │
+     ├──► Attention Heatmap (30 frames, red=ignored / green=focused)
+     ├──► Skeleton Mirror (live geometric hand view)
+     └──► Text-to-Speech
+```
 
 ---
 
-## Project Structure
+## Why no CNN
+
+Most vision projects use CNN on raw pixels — that makes models 50–200MB and sensitive to lighting and background. Here, MediaPipe extracts the hand's 3D skeleton first, so the LSTM only sees 63 clean numbers per frame instead of 921,600 pixels. Result: **5MB model, 95% accuracy, runs on CPU.**
+
+---
+
+## Signs supported
+
+| # | Sign | # | Sign |
+|---|------|---|------|
+| 1 | hello | 6 | peace |
+| 2 | thanks | 7 | ok |
+| 3 | yes | 8 | fist |
+| 4 | no | 9 | call |
+| 5 | stop | 10 | point |
+
+---
+
+## Project structure
 
 ```
-Sign_asl/
-├── checkpoint_best.pth       # trained model weights
-├── predict.py                # real-time webcam inference
-├── app.py                    # streamlit web app
-├── test_image.py             # single image prediction
-├── requirements.txt
-└── README.md
+sign-language-project/
+├── predict.py               ← main file, run this
+├── hand_landmarker.task     ← MediaPipe model
+├── model/
+│   ├── model_improved.weights.h5
+│   ├── best_model.keras
+│   └── scaler.pkl           ← must match training normalization
+└── data/                    ← self-collected dataset
 ```
 
 ---
 
 ## Setup
 
-**Requirements:** Python 3.11, Mac M1 or Google Colab
-
 ```bash
-# Clone the repo
-git clone https://github.com/yashpratap/asl-sign-language-recognition
-cd asl-sign-language-recognition
-
-# Install dependencies
-pip install torch torchvision timm streamlit pillow
+pip install tensorflow mediapipe opencv-python scikit-learn matplotlib pyttsx3
+python3 predict.py
 ```
 
-> If you're on Mac M1, use Python 3.11 specifically. Python 3.10 has segfault issues with PyTorch on macOS Tahoe (26.x).
-
-```bash
-brew install python@3.11
-python3.11 -m pip install torch torchvision timm streamlit pillow
-```
+Press `Q` to quit.
 
 ---
 
-## Training on Google Colab
+## Training details
 
-Open a new Colab notebook, set runtime to **T4 GPU**, then run:
-
-```python
-# Mount Drive (checkpoints save here)
-from google.colab import drive
-drive.mount('/content/drive')
-
-# Install
-!pip install tqdm timm -q
-
-# Download dataset
-import os
-os.makedirs('/root/.kaggle', exist_ok=True)
-!cp kaggle.json /root/.kaggle/
-!chmod 600 /root/.kaggle/kaggle.json
-!kaggle datasets download -d grassknoted/asl-alphabet -p /content/data --unzip
-```
-
-Then paste the full training script from `train_colab.py`. Checkpoints save to `/content/drive/MyDrive/sign_language_checkpoints/` every 2 epochs.
-
-**Resume from checkpoint**: just re-run the training cell — it auto-detects and resumes from the last saved epoch.
-
-Training config:
-- Batch size: 64
-- Optimizer: AdamW, lr=1e-4
-- Scheduler: CosineAnnealingLR
-- Epochs: 20 (early stopping if needed)
+| Thing | Value |
+|---|---|
+| Dataset | Self-collected via webcam |
+| Sequences per sign | 30+ |
+| Frames per sequence | 30 |
+| Features per frame | 63 |
+| Train/test split | 80/20 stratified |
+| Augmentation | Noise, scale, time warp, hand flip |
+| Epochs | Up to 150 (early stopping) |
+| Best val accuracy | **95%** |
 
 ---
 
-## Running Inference
+## Features
 
-### Streamlit app (recommended)
-
-```bash
-python3.11 -m streamlit run app.py
-```
-
-Opens in your browser. Two modes:
-- **Webcam** — point your hand at the camera, click to capture, get prediction
-- **Upload** — drag any image of a hand sign, get top-5 predictions with confidence bars
-
-![Streamlit](https://streamlit.io/images/brand/streamlit-logo-secondary-colormark-darktext.png)
-
-### Real-time webcam (terminal)
-
-```bash
-python3.11 predict.py
-```
-
-Shows live feed with bounding box around detected hand, top prediction + confidence, and FPS counter. Press `Q` to quit.
-
-### Single image test
-
-```bash
-python3.11 test_image.py path/to/image.jpg
-```
+- **Attention heatmap** — shows which of the 30 frames the LSTM focused on most. Green = model paid attention here, red = ignored.
+- **Skeleton mirror** — right panel shows the raw 21-point hand geometry the AI actually uses. No camera, no background, just dots and lines.
+- **Confidence score** — color coded bar (green > 85%, yellow > 75%, red below).
+- **Buffer indicator** — orange bar shows progress toward the 30-frame window.
 
 ---
 
-## Tech Stack
+## Built with
 
-| Component | Tool |
-|-----------|------|
-| Deep learning | PyTorch 2.11 |
-| CNN backbone | ResNet50 (torchvision) |
-| Transformer | ViT-Base/16 (timm) |
-| Training | Google Colab T4 |
-| Checkpointing | Google Drive |
-| UI | Streamlit |
-| Image ops | Pillow |
-| Camera (Mac) | imagesnap (AVFoundation) |
+- TensorFlow / Keras — model training and inference
+- MediaPipe — hand landmark extraction
+- OpenCV — camera feed and UI
+- scikit-learn — data normalization
+- pyttsx3 — text to speech
+- matplotlib — heatmap rendering
 
----
 
-## Known Issues
-
-**Segfault on Mac M1 with Python 3.10**  
-macOS Tahoe (26.x) has compatibility issues with Python 3.10 + PyTorch. Use Python 3.11.
-
-**OpenCV `imshow` crashes on macOS 26**  
-The Streamlit version avoids OpenCV display entirely — use `app.py` instead of `predict.py` if you hit this.
-
-**MediaPipe on M1**  
-Removed MediaPipe entirely. Hand detection uses skin color segmentation via numpy — no native library crashes.
-
----
-
-## Future Work
-
-- Add Indian Sign Language (ISL) support
-- Sentence-level continuous sign recognition
-- Mobile deployment (CoreML for iOS)
-- Two-hand sign detection
-- Word-to-sentence translation using an LLM
-
----
-
-## Author
-
-**Yash Pratap Singh**  
-Student, Bennett University  
-📧 yashthakur1700@gmail.com  
-🔗 [GitHub](https://github.com/yashpratap)
-
----
-
-## License
-
-MIT License — feel free to use, fork, and build on this.
-
----
-
-## Acknowledgements
-
-- [grassknoted](https://www.kaggle.com/grassknoted) for the ASL Alphabet dataset on Kaggle
-- [rwightman](https://github.com/rwightman/pytorch-image-models) for the timm library (ViT weights)
-- [PyTorch](https://pytorch.org) team for torchvision ResNet50 pretrained weights
+Owner: Yash Pratap singh 
+Bennett University
+yashthakur1700@gmail.com
