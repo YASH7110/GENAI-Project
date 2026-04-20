@@ -141,9 +141,7 @@ Press `Q` to quit.
 
 
 Owner: Yash Pratap singh 
-Bennett University
-
-##*Contact
+Bennett University##Contact
 yashthakur1700@gmail.com 
 
   ->->->
