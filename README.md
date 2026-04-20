@@ -143,3 +143,13 @@ Press `Q` to quit.
 Owner: Yash Pratap singh 
 Bennett University
 yashthakur1700@gmail.com
+          🚀
+          ⚡️
+          ⬇️
+          ⬇️
+          ⬇️
+
+Drive Link:(Model Wights and other information)
+
+https://drive.google.com/drive/folders/15Kk_C98q0QB72D8VBTil8e7fRoVM2YlX?usp=sharing
+
